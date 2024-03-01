@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block title %}
+    Manager Dashboard
+{% endblock %}
+
+{% block content %}
+    
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Hello, {{ manager.mana_name}}</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>&emsp;
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Action
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{{url_for('manager')}}">Logout</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <div class="m-5 d-flex justify-content-center">
+      <h1>Welcome to your Dashboard, {{ manager.mana_name}}</h1>
+    </div>
+
+{% if manager.categories %}
+<div class="container-fluid m-5">
+  <div class="card mb-5" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">Need more categories?</h5>
+      <p class="card-text text-end">You can always add a new category!</p>
+      <a href="{{url_for('category_add', id = manager.m_id)}}"><button type="button" class="btn btn-outline-success"><i class="bi bi-plus-circle"></i>&nbsp;Add a new category</button></a>
+    </div>
+  </div>
+  </div>
+</div>
+<div class="container-fluid">
+  {% for cat in manager.categories %}
+    <div class="container m-5 p-5 border">
+      <span><h3>{{ cat.category_name }}</h3></span><br><br>
+      <div class="container">
+
+        {% if cat.contains %}
+        <div class="container mb-5">
+          <div class="row row-cols-3 row-cols-md-4 g-4">
+          {% for product in cat.contains %}
+
+              <div class="col">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">{{ product.product_name }}</h5><br>
+                  <p class="card-text">{{ product.units }}</p>
+                  <h6 class="card-subtitle text-end mb-2 text-body-secondary">&#8377;{{ product.price_per_unit }}/{{ product.units }}</h6>
+                  <p class="card-text">{{ product.description }}</p>
+                  <p class="card-text text-end">Expiry date&nbsp;{{ product.expiry_date }}</p>
+                  <a href="{{url_for('product_update', id = manager.m_id, cat_id = cat.category_id, prod_id = product.product_id)}}"><button type="button" class="btn btn-outline-warning"><i class="bi bi-pencil-square"></i>&nbsp;Update this product</button></a><br><br>
+                  <a href="{{url_for('product_delete', id = manager.m_id, cat_id = cat.category_id, prod_id = product.product_id)}}"><button type="button" class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i>&nbsp;Delete this product</button></a>
+                </div>
+                <div class="card-footer text-center text-body-secondary">
+                  <em>Stock:&nbsp;{{ product.stock }}</em>
+                </div>
+              </div>
+            </div>
+            
+          {% endfor %}
+          </div>
+        </div>
+<br>
+        <div class="container-fluid mb-5">
+          <div class="card mb-5" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Add more products!</h5>
+              <p class="card-text text-end">You can always a new product!</p>
+              <a href="{{url_for('product_add', id = manager.m_id, cat_id = cat.category_id) }}"><button type="button" class="btn btn-outline-success"><i class="bi bi-plus-circle"></i>&nbsp;Add more products in this category</button></a>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <br>
+        <div class="container-fluid mb-1">
+          <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">No products here!</h5>
+              <p class="card-text text-end">You can always a new product!</p>
+              <a href="{{url_for('product_add', id = manager.m_id, cat_id = cat.category_id) }}"><button type="button" class="btn btn-outline-success"><i class="bi bi-plus-circle"></i>&nbsp;Add Products in this category</button></a>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div><br>
+      <div>
+        <a href="{{ url_for('category_update', id =manager.m_id, cat_id = cat.category_id) }}" class="me-3"><button type="button" class="btn btn-outline-warning"><i class="bi bi-pencil-square"></i>&nbsp;Edit Category Details</button></a>
+        <a href="{{ url_for('category_delete', id =manager.m_id, cat_id = cat.category_id) }}"><button type="button" class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i>&nbsp;Delete this Category</button></a>
+      </div>
+    </div><br><br>
+  {% endfor %}
+{% else %}
+<div class="container-fluid m-5">
+<div class="card m-5" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">Nothing here!</h5>
+    <p class="card-text text-end">You can always add a new category!</p>
+    <a href="{{url_for('category_add', id = manager.m_id)}}"><button type="button" class="btn btn-outline-success"><i class="bi bi-plus-circle"></i>&nbsp;Add a new category</button></a>
+  </div>
+</div>
+</div>
+{% endif %}
+
+{% endblock %}
+

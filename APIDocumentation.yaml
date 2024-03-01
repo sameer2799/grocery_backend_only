@@ -1,0 +1,422 @@
+openapi: 3.0.0
+info:
+  title: Grocery Store - OpenAPI Documentation
+  version: 1.0.0
+  description: |-
+    This documentation lists all the information about APIs available in the app.
+    The webapp can be accessed from the below link:
+    - [Grocery Store](http://localhost:5000/)
+    <br><br><br>
+    <h2> Error Codes </h2>  
+    <table>
+      <thead> 
+        <th>Resourses</th> 
+        <th>Error Codes</th> 
+        <th>Message</th> 
+      </thead> 
+      <tbody> 
+        <tr> 
+          <td>Category</td>
+          <td>CA400</td>
+          <td>The category you are looking for, was not found</td> 
+        </tr>
+        <tr> 
+          <td>Product</td>
+          <td>PR400</td>
+          <td>The product you are looking for, was not found!</td> 
+        </tr>
+        <tr> 
+          <td>Category and Product</td>
+          <td>UQ300</td>
+          <td>Please enter a unique name!</td> 
+        </tr>
+        <tr> 
+          <td>Category and Product</td>
+          <td>EM300</td>
+          <td>Fields are empty!</td> 
+        </tr>
+      </tbody>
+    </table>
+    
+servers:
+  - url: http://localhost:5000/
+tags:
+  - name: category
+    description: Operations for category management 
+  - name: products
+    description: Operations for product management 
+paths:
+  /api/manager/{manager_id}/get/category/{category_id}:
+    get:
+      tags:
+        - category
+      summary: Get a category
+      description: Will return a category created by the particular manager.
+      parameters:
+        - name: manager_id
+          in: path
+          description: The id of manager who queried the category
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: category_id
+          in: path
+          description: The id of category created by the manager.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'          
+            
+        '404':
+          description: Category Not Found Error
+        
+  /api/manager/{manager_id}/delete/category/{category_id}:    
+    delete:
+      tags:
+        - category
+      summary: Delete category
+      description: Deletes an existing category
+      operationId: deleteCat
+      parameters:
+        - name: manager_id
+          in: path
+          description: manager id who is deleting
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: category_id
+          in: path
+          description: category id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Category Deletion Successful
+        '404':
+          description: Category Not Found Error
+        '405':
+          description: Empty Entries Error
+  /api/manager/{manager_id}/put/category/{category_id}:
+    put:
+      tags:
+        - category
+      summary: Update category
+      description: Update an existing category in the store
+      operationId: upCat
+      parameters:
+        - name: manager_id
+          in: path
+          description: id of manager who is updating the category
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: category_id
+          in: path
+          description: id of the category that needs updating
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update category in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryPost'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '300':
+          description: Unique Constraint Failed
+        '404':
+          description: Category Not Found Error
+        '405':
+          description: Empty Entries Error
+  /api/manager/{manager_id}/add/category:
+    post:
+      tags:
+        - category
+      summary: Add a new category to the store
+      description: Add a new category to the store
+      operationId: addCat
+      parameters:
+        - name: manager_id
+          in: path
+          description: id of manager who is creating the category
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Create a new category in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryPost'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '300':
+          description: Unique Constraint Failed
+        '405':
+          description: Empty Entries Error
+
+  /api/manager/{manager_id}/category/{category_id}/get/product/{product_id}:
+    get:
+      tags:
+        - products
+      summary: Get a product
+      description: Will return a product created by the particular manager in the particular category.
+      parameters:
+        - name: manager_id
+          in: path
+          description: The id of manager who queried the product
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: category_id
+          in: path
+          description: The id of category.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: product_id
+          in: path
+          description: The id of product listed by the manager.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Product Not Found Error
+  /api/manager/{manager_id}/category/{category_id}/delete/product/{product_id}:
+    delete:
+      tags:
+        - products
+      summary: Delete product
+      description: Deletes an existing product
+      operationId: deleteProd
+      parameters:
+        - name: manager_id
+          in: path
+          description: id of manager who is deleting
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: category_id
+          in: path
+          description: id of category in which product belongs
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: product_id
+          in: path
+          description: id of product being deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Product Deletion Successful
+        '400':
+          description: Product Not Found Error
+        '405':
+          description: Empty Entries Error
+  /api/manager/{manager_id}/category/{category_id}/add/product:
+    post:
+      tags:
+        - products
+      summary: Add a new product to the store
+      description: Add a new product to the store
+      operationId: addProd
+      parameters:
+        - name: manager_id
+          in: path
+          description: id of manager who is creating the product
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: category_id
+          in: path
+          description: id of category in which the new product should belong
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: details of new product to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPost'
+        '300':
+          description: Unique Constraint Failed
+        '405':
+          description: Empty Entries Error
+  
+  /api/manager/{manager_id}/category/{category_id}/put/product/{product_id}:
+    put:
+      tags:
+        - products
+      summary: Update product
+      description: Update an existing product in the store
+      operationId: upProd
+      parameters:
+        - name: manager_id
+          in: path
+          description: id of manager who is updating the products
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: category_id
+          in: path
+          description: id of category in which the product belongs
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: product_id
+          in: path
+          description: id of the product that needs updating
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update product in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPost'
+        '300':
+          description: Unique Constraint Failed
+        '400':
+          description: Product Not Found Error
+        '405':
+          description: Empty Entries Error
+    
+    
+components:
+  schemas:
+    CategoryPost:
+      type: object
+      properties:
+        category_name:
+          type: string
+          example: fruit
+      xml:
+        name: category
+    Category:
+      type: object
+      properties:
+        category_id:
+          type: integer
+          format: int64
+          example: 1
+        category_name:
+          type: string
+          example: fruit
+      xml:
+        name: category
+    Product:
+      type: object
+      properties:
+        product_name:
+          type: string
+          example: potato
+        units:
+          type: string
+          example: kg
+        price_per_unit:
+          type: string
+          example: 80
+        stock:
+          type: integer
+          example: 30
+        expiry_date:
+          type: string
+          example: 2023-08-01
+        description:
+          type: string
+          example: Lorem ipsum
+      xml:
+        name: Product
+    ProductPost:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          format: int64
+          example: 1
+        product_name:
+          type: string
+          example: potato
+        units:
+          type: string
+          example: kg
+        price_per_unit:
+          type: string
+          example: 80
+        stock:
+          type: integer
+          example: 30
+        expiry_date:
+          type: string
+          example: 2023-08-01
+        description:
+          type: string
+          example: Lorem ipsum
+      xml:
+        name: Product

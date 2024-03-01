@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}
+    Product Delete
+{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Hello</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>&emsp;
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{url_for('manager_dashboard', id = id)}}">Home</a>
+          </li>
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Action
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{{url_for('manager')}}">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+<div class="m-5 d-flex justify-content-center">
+    <h1>Confirm product deletion</h1>
+  </div>
+<br>
+<form action="{{url_for('product_delete', id = id, cat_id = cat_id, prod_id = prod_id)}}" method="post">
+    <div class="container">
+        <div class="mb-3">
+            <h2>Are you sure you want to delete this product from the category? This action is non reversible.</h2>
+            <br><br>
+            <div class="btn-group" role="group" aria-label="Vertical radio toggle button group">
+                <input type="radio" class="btn-check" name="confirm" id="vbtn-radio1" autocomplete="off" value="YES">
+                <label class="btn btn-outline-danger" for="vbtn-radio1">YES</label>
+                
+                <input type="radio" class="btn-check" name="confirm" id="vbtn-radio2" autocomplete="off" value="NO" checked>
+                <label class="btn btn-outline-success" for="vbtn-radio2">NO</label>
+            </div>
+        </div>
+        <br><br>
+        <button type="submit" class="btn btn-primary ms-5">Done</button>
+    </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block title %}
+    User Dashboard
+{% endblock %}
+
+{% block content %}
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+          <a class="navbar-brand" href="#">Hello, {{ current_user.user_name }}</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Action
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{{ url_for('cust_logout') }}">Logout</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('cust_cart', cust_id = current_user.id) }}"> Cart {{ cart|length }}</a>
+              </li>
+            </ul>
+            <form class="d-flex" role="search" action="{{url_for('search', cust_id = current_user.id)}}" method="post">
+              <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+      </div>
+    </nav>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <div class="m-5 d-flex justify-content-center">
+      <h1>Welcome to Grocery Store, {{ current_user.user_name}}</h1>
+    </div>
+<br><br><br>
+{% if category %}
+<div class="container-fluid d-flex">
+<div class="container-fluid m-5">
+  {%- for cat in category -%}
+    <div class="container">
+      {%- if cat.contains -%}
+        <div class="container m-3"><h1> {{ cat.category_name }}</h1></div><br>
+        <div class="row row-cols-3 row-cols-md-4 ms-2 g-4">
+          {%- for product in cat.contains -%}
+          <div class="col">
+          <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h4 class="card-title">{{ product.product_name }}</h4>
+              <h6 class="card-subtitle text-end mb-2 text-body-secondary">&#8377;{{ product.price_per_unit }}/{{ product.units }}</h6>
+              <p class="card-text">{{ product.description }}</p>
+              {% if product.stock >0 %}
+              <p class="card-text text-body-secondary"><small>Expiry {{product.expiry_date}}</small></p>
+              <div>
+                <form action="{{url_for('addding_to_cart', cust_id = current_user.id)}}" method="post">
+                  <input type="hidden" name="product_id" value="{{product.product_id}}">
+                  <label for="quant">Quantity: </label><br><input class="form-control me-2" type="number" name="quantity" id="quant" value="1" min="1" max="{{product.stock}}">
+                  <p class="text-center">{{ product.units }}</p>
+                  <button class="btn btn-outline-primary" type="submit">Add to Cart&nbsp;<i class="bi bi-cart4"></i></button>
+                </form>
+              </div>
+              {% else %}
+                <br><button disabled="disabled">Out of Stock</button>
+              {% endif %}
+            </div>
+            <div class="card-footer text-end text-body-secondary">
+              <em><small>Stock Left: {{ product.stock }}</small></em>
+            </div>
+          </div>
+        </div>
+        {%- else -%}
+      <div class="col">
+        <div><h1><em>Currently we have no products. Sorry for the inconvenience.</em></h1></div>
+      </div>
+        {%- endfor -%}
+      </div>
+      {%- endif -%}
+    </div>
+  {%- endfor -%}
+</div>
+</div>
+{% else %}
+<div class="m-5 d-flex justify-content-center">
+  <h1>Currently we have no products. Sorry for the inconvenience.</h1>
+</div>
+{%- endif -%}
+{% endblock %}
+
+

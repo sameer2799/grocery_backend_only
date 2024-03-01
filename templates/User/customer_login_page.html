@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}
+    Customer Login
+{% endblock %}
+
+{% block content %}
+    <div class="container-md px-1 py-5 shadow-lg p-3 m-5 bg-body-tertiary rounded mx-auto p-2" style="width: 1500px;margin-top: 50px;">
+        <div class="container mx-auto m-5 p-4 text-center shadow-lg p-3 mb-1 bg-body-tertiary rounded mx-auto p-5" style="width: 900px;">
+          <h1 style="margin-top: 20px;"><a href="/" class="link-success link-underline-light">Login</a></h1>
+          <br/>
+        </div>
+    <br><br><br><br><br>
+        <div style="margin: auto; width: 40%; padding: 10px;">
+        <form method="POST" action="" class="p-3 bg-primary-subtle border border-primary rounded-end rounded-start">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                <label for=""> {{ form.username.label }} </label><br><br>
+                {{ form.username }}
+            </div><br>
+            <div class="mb-3">
+                <label for=""> {{ form.password.label }} </label><br><br>
+                {{ form.password }}
+            </div>
+            <div>
+                {% for field, errors in form.errors.items() %}
+                    <small class="form-text text-muted">
+                        {{ ', '.join(errors) }}
+                    </small>
+                {% endfor %}
+            </div>
+            {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+            <div style="margin: auto; width: 40%; padding: 10px;">{{ form.submit }}</div>
+        </form>
+        <br><br>
+        <div style="margin: auto; width: 50%; padding: 10px;">
+            <button type="submit" class="btn btn-light"><a href="{{ url_for('customer_register') }}">Don't have an account? Register Here!</a></button>
+        </div>
+        </div>
+    
+    
+    </div>
+{% endblock %}

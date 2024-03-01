@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}
+    Manager Login
+{% endblock %}
+
+{% block content %}
+  
+  <div class="container-md px-1 py-5 shadow-lg p-3 m-5 bg-body-tertiary rounded mx-auto p-2" style="width: 1500px;margin-top: 50px;">
+    <div class="container mx-auto m-5 p-4 text-center shadow-lg p-3 mb-1 bg-body-tertiary rounded mx-auto p-5" style="width: 900px;">
+      <h1 style="margin-top: 20px;"><a href="/" class="link-success link-underline-light">Manager Login</a></h1>
+      <br/>
+    </div>
+  
+    <div class="container p-2 m-5" >
+      <div class="row m-5 p-3">
+        <form action="{{ url_for('manager')}}" method="post">
+          <div class="mb-4">
+            <label for="username" class="form-label"><span><h4>Username</h4></span></label>
+            <input type="text" class="form-control" name="username" id="username" aria-describedby="emailHelp" placeholder="Username" required>
+            
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"><span><h4>Password</h4></span></label>
+            <input type="password" class="form-control" id="exampleInputPassword1" name="pass" placeholder="Password" required>
+          </div>
+          {%- with messages = get_flashed_messages() -%}
+          {%- if messages -%}
+          <ul class=flashes>
+          {%- for message in messages -%}
+              <li>{{ message }}</li>
+          {% endfor %}
+          </ul>
+          {% endif %}
+          {% endwith %}
+          <button type="submit" class="btn btn-lg btn-primary">Submit</button>
+        </form>        
+    </div>
+  </div>
+  </div>
+{% endblock %}

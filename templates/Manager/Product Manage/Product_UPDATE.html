@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}
+    Product Update
+{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Hello</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>&emsp;
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{url_for('manager_dashboard', id = id)}}">Home</a>
+          </li>
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Action
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{{url_for('manager')}}">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  {% endwith %}
+  <div class="m-5 d-flex justify-content-center">
+    <h1>Update Product</h1>
+  </div>
+<br>
+<form action="{{url_for('product_update', id = id, cat_id = cat_id, prod_id = prod_id)}}" method="post">
+    <div class="container">
+        <div class="mb-3">
+            <label for="cat" class="form-label">Enter product's new name</label>
+            <input type="text" class="form-control" id="cat" name="prod_name" placeholder="For example: Banana" required autofocus>
+        </div>
+        <div class="mb-3">
+            <label for="unit" class="form-label">Enter new units for product pricing</label>
+            <input type="text" class="form-control" id="unit" name="units" placeholder="dozens" required>
+        </div>
+        <div class="mb-3">
+            <label for="price_per_unit" class="form-label">Enter new price per unit</label>
+            <input type="number" min="0" class="form-control" id="price_per_unit" name="unit_price" placeholder="100" required>
+        </div>
+        <div class="mb-3">
+            <label for="stock" class="form-label">Update stock</label>
+            <input type="number" min="0" class="form-control" id="stock" name="stocked" placeholder="100" required>
+        </div>
+        <div class="mb-3">
+            <label for="expiry_date" class="form-label">Update expiry date</label>
+            <input type="date" max="2023-09-01" min="2023-08-01" class="form-control" id="expiry_date" name="expiry" required placeholder="01/01/2000">
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Update description</label>
+            <textarea type="text" class="form-control" id="description" name="descrip" placeholder="Fresh out of farm."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+</form>
+
+{% endblock %}

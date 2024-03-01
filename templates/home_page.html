@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Home
+{% endblock %}
+
+{% block content %}
+
+<div class="container-md px-1 py-5 shadow-lg p-3 m-5 bg-body-tertiary rounded mx-auto p-2" style="width: 1500px;margin-top: 50px;">
+  <div class="container mx-auto m-5 p-4 text-center shadow-lg p-3 mb-1 bg-body-tertiary rounded mx-auto p-5" style="width: 900px;">
+    <h1 style="margin-top: 20px;"> Grocery Store</h1>
+    <br/>
+  </div>
+
+  <div class="container p-2 text-center " style="margin: 80px 20px 20px 20px;">
+    <div class="row m-5">
+      <div class="col">
+      <div class="p-3 bg-success-subtle border-success rounded-end rounded-start">
+        <br><span><h4>Managers</h4></span><br><br>
+        <a href="{{ url_for('manager') }}"><button class="btn btn-lg btn-outline-success">Login Here</button></a><br><br>
+        </div>
+      </div>
+      <div class="col">
+        <div class="p-3 bg-primary-subtle border-primary rounded-end rounded-start">
+          <br><span><h4>Users</h4></span><br><br>
+          <a href="{{ url_for('customer') }}"><button class="btn btn-lg btn-outline-primary">Start buying here</button></a><br><br>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
